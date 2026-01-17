@@ -1,0 +1,62 @@
+package br.com.serverest.api.tests;
+
+import br.com.serverest.api.client.UsuarioClient;
+import br.com.serverest.api.data.UsuarioDataFactory;
+import br.com.serverest.api.model.UsuarioModel;
+import br.com.serverest.api.specs.BaseSpec;
+import io.restassured.response.Response;
+import org.testng.annotations.Test;
+
+import static org.hamcrest.Matchers.*;
+
+public class UsuarioTest extends BaseSpec {
+
+    private UsuarioClient usuarioClient = new UsuarioClient();
+
+    @Test(description = "Deve cadastrar um usuário com sucesso")
+    public void deveCadastrarUsuarioComSucesso() {
+
+        UsuarioModel usuario = UsuarioDataFactory.criarUsuarioDadosDinamicos();
+
+        Response response = usuarioClient.cadastrarUsuario(usuario);
+
+        response.then()
+                .statusCode(201)
+                .body("message", is("Cadastro realizado com sucesso"))
+                .body("_id", notNullValue());
+    }
+
+    @Test(description = "Deve consultar um usuário com sucesso")
+    public void deveConsultarUmUsuarioComSucesso() {
+        UsuarioModel usuario = UsuarioDataFactory.criarUsuarioDadosDinamicos();
+
+        Response response = usuarioClient.cadastrarUsuario(usuario);
+        String id = response.jsonPath()
+                .getString("_id");
+
+        Response responseConsulta = usuarioClient.buscarUsuarioPorId(id);
+
+        responseConsulta.then()
+                .statusCode(200)
+                .body("_id", is(id))
+                .body("nome", is(usuario.getNome()))
+                .body("email", is(usuario.getEmail()));
+    }
+
+    @Test(description = "Deve deletar um Usuário com sucesso")
+    public void deveDeletarUsuarioComSucesso() {
+        UsuarioModel usuario = UsuarioDataFactory.criarUsuarioDadosDinamicos();
+        Response response = usuarioClient.cadastrarUsuario(usuario);
+        String id = response.jsonPath()
+                .getString("_id");
+
+        Response responseDeletar = usuarioClient.deletarUsuarioPorId(id);
+        responseDeletar.then()
+                .statusCode(200)
+                .body("message", is("Registro excluído com sucesso"));
+        usuarioClient.buscarUsuarioPorId(id)
+                .then()
+                .statusCode(400)
+                .body("message", is("Usuário não encontrado"));
+    }
+}
