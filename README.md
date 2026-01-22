@@ -46,8 +46,4 @@ Implementação de validação de contrato para o recurso de Carrinhos.
 - [x] Gestão de usuários dinâmicos.
 - [x] Login e captura de token de autorização.
 
-## 🚀 Como rodar o projeto
-
-1. Clone o repositório:
-   ```bash
-   git clone [https://github.com/seu-usuario/seu-repositorio.git](https://github.com/seu-usuario/seu-repositorio.git)
+<img width="1900" height="464" alt="image" src="https://github.com/user-attachments/assets/63dcfca4-8c94-4a8d-9cbf-a8aa21dde02f" />
