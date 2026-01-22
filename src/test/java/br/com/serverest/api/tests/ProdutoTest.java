@@ -9,6 +9,10 @@ import br.com.serverest.api.model.LoginModel;
 import br.com.serverest.api.model.ProdutoModel;
 import br.com.serverest.api.model.UsuarioModel;
 import br.com.serverest.api.specs.BaseSpec;
+import io.qameta.allure.Feature;
+import io.qameta.allure.Severity;
+import io.qameta.allure.SeverityLevel;
+import io.qameta.allure.Story;
 import io.restassured.response.Response;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
@@ -35,6 +39,9 @@ public class ProdutoTest extends BaseSpec {
     }
 
     @Test(description = "Deve cadastrar um produto com sucesso")
+    @Severity(SeverityLevel.CRITICAL)
+    @Feature("Gestão de Produtos")
+    @Story("Cadastro de novos produtos")
     public void deveCadastrarProdutoComSucesso() {
         ProdutoModel produto = ProdutoDataFactory.criarProdutoDinamico();
         Response response = produtoClient.cadastrarProduto(produto, token);
