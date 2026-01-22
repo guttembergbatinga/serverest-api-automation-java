@@ -16,9 +16,9 @@ import io.qameta.allure.Story;
 import io.restassured.response.Response;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
-
 import static org.hamcrest.Matchers.*;
 
+@Feature("Gestão de Produtos")
 public class ProdutoTest extends BaseSpec {
 
     private String token;
@@ -28,8 +28,8 @@ public class ProdutoTest extends BaseSpec {
     public void prepararAmbiente() {
         UsuarioClient usuarioClient = new UsuarioClient();
         LoginClient loginClient = new LoginClient();
-
         UsuarioModel admin = UsuarioDataFactory.criarUsuarioDadosDinamicos();
+        admin.setEmail("qa_" + System.currentTimeMillis() + "@teste.com");
         usuarioClient.cadastrarUsuario(admin);
 
         LoginModel login = new LoginModel(admin.getEmail(), admin.getPassword());
@@ -40,7 +40,6 @@ public class ProdutoTest extends BaseSpec {
 
     @Test(description = "Deve cadastrar um produto com sucesso")
     @Severity(SeverityLevel.CRITICAL)
-    @Feature("Gestão de Produtos")
     @Story("Cadastro de novos produtos")
     public void deveCadastrarProdutoComSucesso() {
         ProdutoModel produto = ProdutoDataFactory.criarProdutoDinamico();
@@ -53,8 +52,9 @@ public class ProdutoTest extends BaseSpec {
     }
 
     @Test(description = "Não deve permitir cadastrar produto sem token")
+    @Severity(SeverityLevel.NORMAL)
+    @Story("Segurança do Cadastro")
     public void deveRetornarErroAoCadastrarProdutoSemToken() {
-
         ProdutoModel produto = ProdutoDataFactory.criarProdutoDinamico();
         Response response = produtoClient.cadastrarProduto(produto, "");
 
@@ -64,6 +64,8 @@ public class ProdutoTest extends BaseSpec {
     }
 
     @Test(description = "Não deve permitir cadastrar produto com preço negativo")
+    @Severity(SeverityLevel.MINOR)
+    @Story("Validação de campos obrigatórios/inválidos")
     public void deveRetornarErroAoCadastrarProdutoComPrecoNegativo() {
         ProdutoModel produto = ProdutoDataFactory.criarProdutoDinamico();
         produto.setPreco(-50);
@@ -74,9 +76,11 @@ public class ProdutoTest extends BaseSpec {
                 .statusCode(400)
                 .body("preco", is("preco deve ser um número positivo"));
     }
-    @Test(description = "Deve buscar um produto por ID com sucesso")
-    public void deveBuscarProdutoPorIdComSucesso() {
 
+    @Test(description = "Deve buscar um produto por ID com sucesso")
+    @Severity(SeverityLevel.BLOCKER)
+    @Story("Consulta de produtos")
+    public void deveBuscarProdutoPorIdComSucesso() {
         ProdutoModel produtoNovo = ProdutoDataFactory.criarProdutoDinamico();
         Response responseCadastro = produtoClient.cadastrarProduto(produtoNovo, token);
         String idProduto = responseCadastro.jsonPath().getString("_id");
@@ -89,9 +93,11 @@ public class ProdutoTest extends BaseSpec {
                 .body("nome", is(produtoNovo.getNome()))
                 .body("preco", is(produtoNovo.getPreco()));
     }
-    @Test(description = "Deve excluir um produto com sucesso")
-    public void deveExcluirProdutoComSucesso() {
 
+    @Test(description = "Deve excluir um produto com sucesso")
+    @Severity(SeverityLevel.CRITICAL)
+    @Story("Exclusão de produtos")
+    public void deveExcluirProdutoComSucesso() {
         ProdutoModel produto = ProdutoDataFactory.criarProdutoDinamico();
         Response responseCadastro = produtoClient.cadastrarProduto(produto, token);
         String id = responseCadastro.jsonPath().getString("_id");
