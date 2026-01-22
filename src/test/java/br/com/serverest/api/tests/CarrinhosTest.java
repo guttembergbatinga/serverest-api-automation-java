@@ -5,12 +5,17 @@ import br.com.serverest.api.data.*;
 import br.com.serverest.api.dataFactory.CarrinhosDataFactory;
 import br.com.serverest.api.model.*;
 import br.com.serverest.api.specs.BaseSpec;
+import io.qameta.allure.Feature;
+import io.qameta.allure.Severity;
+import io.qameta.allure.SeverityLevel;
+import io.qameta.allure.Story;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 import static org.hamcrest.Matchers.*;
 import static io.restassured.module.jsv.JsonSchemaValidator.matchesJsonSchemaInClasspath;
 
+@Feature("Gestão de Carrinhos")
 public class CarrinhosTest extends BaseSpec {
 
     private final CarrinhosClient carrinhosClient = new CarrinhosClient();
@@ -46,6 +51,8 @@ public class CarrinhosTest extends BaseSpec {
     // --- TESTES FUNCIONAIS (REGRAS DE NEGÓCIO) ---
 
     @Test(description = "Deve cadastrar um carrinho com sucesso")
+    @Severity(SeverityLevel.BLOCKER)
+    @Story("Fluxo de compra do usuário")
     public void deveCadastrarCarrinhoComSucesso() {
         CarrinhosModel carrinho = CarrinhosDataFactory.gerarCarrinhoComUmProduto(idProduto, 1);
 
@@ -56,6 +63,8 @@ public class CarrinhosTest extends BaseSpec {
     }
 
     @Test(description = "Não deve permitir mais de um carrinho por usuário")
+    @Severity(SeverityLevel.NORMAL)
+    @Story("Regras de negócio de carrinho")
     public void naoDevePermitirMaisDeUmCarrinho() {
         CarrinhosModel carrinho = CarrinhosDataFactory.gerarCarrinhoComUmProduto(idProduto, 1);
         carrinhosClient.cadastrarCarrinho(carrinho, token);
@@ -67,6 +76,8 @@ public class CarrinhosTest extends BaseSpec {
     }
 
     @Test(description = "Deve consultar um carrinho pelo ID com sucesso")
+    @Severity(SeverityLevel.CRITICAL)
+    @Story("Fluxo de compra do usuário")
     public void deveConsultarCarrinhoPorId() {
         CarrinhosModel carrinho = CarrinhosDataFactory.gerarCarrinhoComUmProduto(idProduto, 1);
         String idCarrinho = carrinhosClient.cadastrarCarrinho(carrinho, token)
@@ -80,6 +91,8 @@ public class CarrinhosTest extends BaseSpec {
     }
 
     @Test(description = "Ao concluir uma compra o carrinho deve ser excluído")
+    @Severity(SeverityLevel.CRITICAL)
+    @Story("Fluxo de compra do usuário")
     public void deveExcluirCarrinhoAoConcluirCompra() {
         CarrinhosModel carrinho = CarrinhosDataFactory.gerarCarrinhoComUmProduto(idProduto, 1);
         carrinhosClient.cadastrarCarrinho(carrinho, token);
@@ -93,6 +106,8 @@ public class CarrinhosTest extends BaseSpec {
     // --- TESTES DE CONTRATO (JSON SCHEMA) ---
 
     @Test(description = "Deve validar o contrato da resposta de cadastro de carrinho")
+    @Severity(SeverityLevel.NORMAL)
+    @Story("Validação de Contrato (JSON Schema)")
     public void deveValidarContratoCadastroCarrinho() {
         CarrinhosModel carrinho = CarrinhosDataFactory.gerarCarrinhoComUmProduto(idProduto, 1);
 
@@ -103,6 +118,8 @@ public class CarrinhosTest extends BaseSpec {
     }
 
     @Test(description = "Deve validar o contrato da consulta de carrinho por ID")
+    @Severity(SeverityLevel.NORMAL)
+    @Story("Validação de Contrato (JSON Schema)")
     public void deveValidarContratoConsultaCarrinho() {
         CarrinhosModel carrinho = CarrinhosDataFactory.gerarCarrinhoComUmProduto(idProduto, 1);
         String idCarrinho = carrinhosClient.cadastrarCarrinho(carrinho, token)
