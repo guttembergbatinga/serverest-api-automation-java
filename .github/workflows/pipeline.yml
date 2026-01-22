@@ -1,0 +1,42 @@
+name: Pipeline de Testes API - ServeRest
+
+# Define quando os testes serão disparados
+on:
+  push:
+    branches: [ "main", "master" ]
+  pull_request:
+    branches: [ "main", "master" ]
+
+jobs:
+  api-tests:
+    runs-on: ubuntu-latest
+
+    steps:
+      # 1. Baixa o código do seu repositório para a máquina do GitHub
+      - name: Checkout do código
+        uses: actions/checkout@v4
+
+      # 2. Instala o Java (JDK 17)
+      - name: Setup Java JDK
+        uses: actions/setup-java@v4
+        with:
+          java-version: '17'
+          distribution: 'temurin'
+          cache: maven
+
+      # 3. Executa os testes (Isso vai baixar as dependências e rodar o TestNG)
+      - name: Executar Testes de API
+        run: mvn test
+
+      # 4. Gera o relatório Allure
+      - name: Gerar Allure Report
+        if: always()
+        run: mvn allure:report
+
+      # 5. Salva o relatório como um arquivo baixável (artefato)
+      - name: Archive Allure Results
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: relatorio-de-testes
+          path: target/site/allure-maven-plugin/
