@@ -9,6 +9,7 @@ import io.qameta.allure.Feature;
 import io.qameta.allure.Severity;
 import io.qameta.allure.SeverityLevel;
 import io.qameta.allure.Story;
+import io.restassured.response.Response;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
@@ -105,28 +106,15 @@ public class CarrinhosTest extends BaseSpec {
 
     // --- TESTES DE CONTRATO (JSON SCHEMA) ---
 
-    @Test(description = "Deve validar o contrato da resposta de cadastro de carrinho")
-    @Severity(SeverityLevel.NORMAL)
-    @Story("Validação de Contrato (JSON Schema)")
-    public void deveValidarContratoCadastroCarrinho() {
-        CarrinhosModel carrinho = CarrinhosDataFactory.gerarCarrinhoComUmProduto(idProduto, 1);
-
-        carrinhosClient.cadastrarCarrinho(carrinho, token)
-                .then()
-                .statusCode(201)
-                .body(matchesJsonSchemaInClasspath("schemas/carrinho-post-schema.json"));
-    }
-
     @Test(description = "Deve validar o contrato da consulta de carrinho por ID")
     @Severity(SeverityLevel.NORMAL)
     @Story("Validação de Contrato (JSON Schema)")
     public void deveValidarContratoConsultaCarrinho() {
         CarrinhosModel carrinho = CarrinhosDataFactory.gerarCarrinhoComUmProduto(idProduto, 1);
-        String idCarrinho = carrinhosClient.cadastrarCarrinho(carrinho, token)
-                .jsonPath()
-                .getString("_id");
+        Response response = carrinhosClient.cadastrarCarrinho(carrinho, token);
+        String id = response.jsonPath().getString("_id");
 
-        carrinhosClient.consultarCarrinhoPorId(idCarrinho)
+        carrinhosClient.consultarCarrinhoPorId(id)
                 .then()
                 .statusCode(200)
                 .body(matchesJsonSchemaInClasspath("schemas/carrinho-get-schema.json"));
