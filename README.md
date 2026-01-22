@@ -30,6 +30,12 @@ Implementação de validação de contrato para o recurso de Carrinhos.
 - **Jackson**: Serialização e desserialização eficiente de objetos.
 - **Maven**: Gestão de dependências e build.
 
+## 📈 Reporting & Visibilidade (Allure Report)
+O projeto utiliza o **Allure Framework** para gerar relatórios de execução detalhados e altamente visuais.
+* **Behaviors:** Testes agrupados por Funcionalidades (*Features*) e Histórias de Usuário (*Stories*).
+* **Severidade:** Classificação de criticidade dos testes (Blocker, Critical, Normal, Minor).
+* **Documentação Viva:** Cada teste possui uma descrição clara do seu objetivo de negócio diretamente no relatório.
+
 ## 📊 Cobertura de Testes
 
 ### 🛡️ Testes de Contrato (JSON Schema)
