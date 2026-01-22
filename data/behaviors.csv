@@ -1,2 +1,7 @@
 "Epic","Feature","Story","FAILED","BROKEN","PASSED","SKIPPED","UNKNOWN"
-"","","","0","0","15","0","0"
+"","","","1","0","9","0","0"
+"","Gestão de Produtos","Consulta de produtos","0","0","1","0","0"
+"","Gestão de Produtos","Cadastro de novos produtos","0","0","1","0","0"
+"","Gestão de Produtos","Exclusão de produtos","0","0","1","0","0"
+"","Gestão de Produtos","Segurança do Cadastro","0","0","1","0","0"
+"","Gestão de Produtos","Validação de campos obrigatórios/inválidos","0","0","1","0","0"
