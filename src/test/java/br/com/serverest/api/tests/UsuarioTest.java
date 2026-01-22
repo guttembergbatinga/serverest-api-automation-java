@@ -16,7 +16,7 @@ import static org.hamcrest.Matchers.*;
 @Feature("Gestão de Usuários")
 public class UsuarioTest extends BaseSpec {
 
-    private UsuarioClient usuarioClient = new UsuarioClient();
+    private final UsuarioClient usuarioClient = new UsuarioClient();
 
     @Test(description = "Deve cadastrar um usuário com sucesso")
     @Severity(SeverityLevel.CRITICAL)
