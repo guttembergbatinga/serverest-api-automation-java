@@ -31,7 +31,7 @@ jobs:
       # 4. Gera o relatório Allure
       - name: Gerar Allure Report
         if: always()
-        run: mvn allure:report
+        run: mvn io.qameta.allure:allure-maven:report
 
       # 5. Salva o relatório como um arquivo baixável (artefato)
       - name: Archive Allure Results
